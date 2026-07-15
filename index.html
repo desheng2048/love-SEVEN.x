@@ -10,7 +10,6 @@
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
@@ -21,20 +20,17 @@
             padding: 20px;
             overflow-x: hidden;
         }
-
         .container {
             max-width: 420px;
             width: 100%;
             position: relative;
             z-index: 10;
         }
-
         .header {
             text-align: center;
             margin-bottom: 30px;
             animation: slideDown 0.8s ease;
         }
-
         .header h1 {
             color: #fff;
             font-size: 32px;
@@ -45,14 +41,12 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .header .subtitle {
             color: rgba(255, 255, 255, 0.9);
             font-size: 14px;
             margin-top: 8px;
             letter-spacing: 2px;
         }
-
         .card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -64,7 +58,6 @@
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.5);
         }
-
         .card::before {
             content: '⭐';
             position: absolute;
@@ -74,11 +67,9 @@
             opacity: 0.08;
             transform: rotate(-15deg);
         }
-
         .fortune-card {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 240, 245, 0.95) 100%);
         }
-
         .fortune-cover {
             display: flex;
             flex-direction: column;
@@ -89,17 +80,14 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
         .fortune-cover:hover {
             transform: scale(1.02);
         }
-
         .fortune-icon-large {
             font-size: 80px;
             margin-bottom: 20px;
             animation: pulse 2s infinite ease-in-out;
         }
-
         .fortune-click-hint {
             color: #667eea;
             font-size: 16px;
@@ -110,21 +98,17 @@
             border-radius: 25px;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
         }
-
         .fortune-content {
             display: none;
         }
-
         .fortune-content.show {
             display: block;
             animation: fadeIn 0.6s ease;
         }
-
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
-
         .section-title {
             color: #667eea;
             font-size: 18px;
@@ -134,7 +118,6 @@
             gap: 10px;
             font-weight: 600;
         }
-
         .love-text {
             font-size: 22px;
             line-height: 1.7;
@@ -150,7 +133,6 @@
             font-weight: 500;
             animation: fadeIn 0.6s ease;
         }
-
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -161,7 +143,6 @@
                 transform: translateY(0) scale(1);
             }
         }
-
         @keyframes slideDown {
             from {
                 opacity: 0;
@@ -172,16 +153,6 @@
                 transform: translateY(0);
             }
         }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
         @keyframes sparkle {
             0%, 100% {
                 opacity: 0.3;
@@ -192,12 +163,10 @@
                 transform: scale(1.2) rotate(180deg);
             }
         }
-
         .fortune-grid {
             display: grid;
             gap: 12px;
         }
-
         .fortune-item {
             background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
             padding: 14px 18px;
@@ -209,34 +178,27 @@
             box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
             transition: all 0.3s ease;
         }
-
         .fortune-item:hover {
             transform: translateX(5px);
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
         }
-
         .fortune-icon {
             font-size: 24px;
             flex-shrink: 0;
             animation: sparkle 3s infinite ease-in-out;
         }
-
         .fortune-item:nth-child(2) .fortune-icon {
             animation-delay: 0.5s;
         }
-
         .fortune-item:nth-child(3) .fortune-icon {
             animation-delay: 1s;
         }
-
         .fortune-item:nth-child(4) .fortune-icon {
             animation-delay: 1.5s;
         }
-
         .fortune-item:nth-child(5) .fortune-icon {
             animation-delay: 2s;
         }
-
         .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             color: white;
@@ -253,7 +215,6 @@
             position: relative;
             overflow: hidden;
         }
-
         .btn::before {
             content: '';
             position: absolute;
@@ -264,29 +225,24 @@
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: left 0.5s ease;
         }
-
         .btn:hover::before {
             left: 100%;
         }
-
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
         }
-
         .btn:active {
             transform: translateY(-1px);
         }
-
         .category-tabs {
             display: flex;
             gap: 8px;
             margin-bottom: 18px;
             flex-wrap: wrap;
         }
-
         .tab {
-            padding: 8px 16px;
+            padding: 10px 16px;
             border-radius: 25px;
             font-size: 13px;
             background: linear-gradient(135deg, #f8f9ff 0%, #fff5f8 100%);
@@ -295,19 +251,19 @@
             transition: all 0.3s ease;
             border: 2px solid transparent;
             font-weight: 500;
+            pointer-events: auto !important;
+            position: relative;
+            z-index: 15;
         }
-
         .tab.active {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
         }
-
         .tab:hover:not(.active) {
             border-color: #667eea;
             transform: scale(1.05);
         }
-
         .footer {
             text-align: center;
             margin-top: 25px;
@@ -316,7 +272,6 @@
             font-weight: 500;
             animation: slideDown 0.8s ease 0.3s backwards;
         }
-
         .footer .signature {
             display: inline-block;
             background: rgba(255, 255, 255, 0.2);
@@ -324,7 +279,6 @@
             border-radius: 20px;
             backdrop-filter: blur(10px);
         }
-
         .decorations {
             position: fixed;
             top: 0;
@@ -335,7 +289,6 @@
             overflow: hidden;
             z-index: 1;
         }
-
         .decoration {
             position: absolute;
             font-size: 35px;
@@ -343,7 +296,6 @@
             animation: float 8s infinite ease-in-out;
             filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
         }
-
         @keyframes float {
             0%, 100% {
                 transform: translateY(0) rotate(0deg) scale(1);
@@ -358,7 +310,6 @@
                 transform: translateY(-30px) rotate(5deg) scale(1.05);
             }
         }
-
         .star-trail {
             position: fixed;
             width: 6px;
@@ -370,7 +321,6 @@
             box-shadow: 0 0 10px #fff, 0 0 20px #ffd1ff;
             animation: trail-fade 1s ease-out forwards;
         }
-
         @keyframes trail-fade {
             from {
                 opacity: 1;
@@ -381,7 +331,6 @@
                 transform: scale(0);
             }
         }
-
         .special-badge {
             position: absolute;
             top: 15px;
@@ -395,19 +344,16 @@
             box-shadow: 0 2px 10px rgba(255, 215, 0, 0.4);
             animation: pulse 2s infinite ease-in-out;
         }
-
         .counter {
             text-align: center;
             color: rgba(255, 255, 255, 0.9);
             font-size: 12px;
             margin-top: 10px;
         }
-
         .counter span {
             color: #ffd1ff;
             font-weight: bold;
         }
-
         .date-display {
             text-align: center;
             color: rgba(255, 255, 255, 0.95);
@@ -421,7 +367,6 @@
             width: 100%;
             box-sizing: border-box;
         }
-
         .date-display span {
             margin: 0 5px;
         }
@@ -435,7 +380,6 @@
             <h1>⭐ 星宝崽专属甜言蜜语 ✨</h1>
             <div class="subtitle">每天都要被宝贝宠坏呀～</div>
         </div>
-
         <!-- 甜言蜜语卡片 -->
         <div class="card">
             <div class="special-badge">星宝崽限定</div>
@@ -449,7 +393,6 @@
             <div class="love-text" id="loveText">
                 今天也要给星宝崽说好多好多甜言蜜语～
             </div>
-
             <button class="btn" onclick="getRandomLove()" id="refreshBtn">
                 ✨ 换一句 ✨
             </button>
@@ -462,7 +405,6 @@
                 <span id="currentDate"></span> | <span id="dailyMessage"></span>
             </div>
         </div>
-
         <!-- 今日运势卡片 -->
         <div class="card fortune-card">
             <div class="fortune-cover" id="fortuneCover" onclick="revealFortune()">
@@ -482,14 +424,12 @@
                 </div>
             </div>
         </div>
-
         <div class="footer">
             <div class="signature">
                 💫 专属制作给最可爱的星宝崽 💫
             </div>
         </div>
     </div>
-
     <script>
         // 星宝崽专属情话库（每个分类20句，每天随机展示精选内容）
         const loveMessages = {
@@ -626,15 +566,13 @@
                 "星宝崽，我会永远守护你"
             ]
         };
-
-        // 星宝崽专属运势库（每天随机展示不同的运势）
+        // 星宝崽专属运势库（基础文案，幸运数字当日固定）
         const fortuneLibrary = [
             {
                 '爱情运': '超级旺！星宝崽魅力爆棚，桃花朵朵开🌸',
                 '今日宜': '适合撒娇、求抱抱、收礼物、吃甜食',
                 '今日忌': '熬夜、生气、不开心、不理星宝崽',
                 '幸运色': '星空紫、银河蓝、星星金、粉色',
-                '幸运数字': '7、17、27（星宝崽的幸运数字）',
                 '幸运物': '星星项链、粉色手机壳、奶茶'
             },
             {
@@ -642,7 +580,6 @@
                 '今日宜': '约会、看电影、吃火锅、说情话',
                 '今日忌': '独自一人、错过电话、不理宝贝',
                 '幸运色': '梦幻粉、浅蓝、薄荷绿',
-                '幸运数字': '3、13、23',
                 '幸运物': '玩偶、巧克力、爱心形状的物品'
             },
             {
@@ -650,7 +587,6 @@
                 '今日宜': '表白、送花、写信、散步',
                 '今日忌': '犹豫、错过机会、放弃',
                 '幸运色': '彩虹色、橙红色、黄色',
-                '幸运数字': '9、19、29',
                 '幸运物': '彩虹笔、鲜花、香水'
             },
             {
@@ -658,7 +594,6 @@
                 '今日宜': '约会、拥抱、牵手、说"我爱你"',
                 '今日忌': '害羞、隐藏感情、错过时机',
                 '幸运色': '玫瑰红、深紫、金色',
-                '幸运数字': '1、11、21',
                 '幸运物': '玫瑰、爱心蛋糕、情书'
             },
             {
@@ -666,15 +601,13 @@
                 '今日宜': '宅家、看电影、做饭、聊天',
                 '今日忌': '加班、忽视对方、冷战',
                 '幸运色': '米白色、浅灰、淡蓝',
-                '幸运数字': '6、16、26',
                 '幸运物': '毛毯、热茶、相册'
             },
             {
-                '爱情运': '惊喜不断！今天会有小确降临💕',
+                '爱情运': '惊喜不断！今天会有小确幸降临💕',
                 '今日宜': '准备惊喜、送礼物、写便签',
-                '今日忌': '平平淡过、没有仪式感',
+                '今日忌': '平淡度过、没有仪式感',
                 '幸运色': '亮银色、宝蓝色、珍珠白',
-                '幸运数字': '4、14、24',
                 '幸运物': '小礼物、便签纸、珍珠饰品'
             },
             {
@@ -682,7 +615,6 @@
                 '今日宜': '拍照、旅行、尝试新事物',
                 '今日忌': '宅在家里、错过美好时光',
                 '幸运色': '春绿色、天蓝色、淡粉色',
-                '幸运数字': '8、18、28',
                 '幸运物': '相机、旅行攻略、纪念册'
             },
             {
@@ -690,7 +622,6 @@
                 '今日宜': '聊天、安慰、陪伴、分享',
                 '今日忌': '争吵、冷战、不关心',
                 '幸运色': '暖橙色、浅黄色、米色',
-                '幸运数字': '2、12、22',
                 '幸运物': '暖手宝、咖啡、拥抱'
             },
             {
@@ -698,7 +629,6 @@
                 '今日宜': '打扮自己、出门社交、主动出击',
                 '今日忌': '宅家、被动等待、错过机会',
                 '幸运色': '亮粉色、银色、亮片色',
-                '幸运数字': '5、15、25',
                 '幸运物': '新衣服、香水、口红'
             },
             {
@@ -706,11 +636,9 @@
                 '今日宜': '接受爱意、表达感谢、享受当下',
                 '今日忌': '拒绝、质疑、不珍惜',
                 '幸运色': '糖果色、彩虹色、多彩',
-                '幸运数字': '10、20、30',
                 '幸运物': '糖果、气球、彩带'
             }
         ];
-
         const fortuneIcons = {
             '爱情运': '💕',
             '今日宜': '✨',
@@ -719,9 +647,41 @@
             '幸运数字': '🔢',
             '幸运物': '🍀'
         };
-
         let currentCategory = '全部';
         let clickCount = 0;
+
+        // 获取当天日期字符串 YYYY-MM-DD
+        function getTodayStr() {
+            const d = new Date();
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            const day = String(d.getDate()).padStart(2, '0');
+            return `${y}-${m}-${day}`;
+        }
+
+        // 获取当日固定幸运数字，跨天才重新生成
+        function getTodayLuckyNum() {
+            const today = getTodayStr();
+            const storageKey = 'starBabyLuckyNum';
+            const saved = localStorage.getItem(storageKey);
+            if (saved) {
+                const data = JSON.parse(saved);
+                // 同一天直接读取缓存数字
+                if (data.date === today) {
+                    return data.numStr;
+                }
+            }
+            // 日期不一样，生成新数字并缓存
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 41) + 10;
+            const num3 = Math.floor(Math.random() * 50) + 51;
+            const numStr = `${num1}、${num2}、${num3}`;
+            localStorage.setItem(storageKey, JSON.stringify({
+                date: today,
+                numStr: numStr
+            }));
+            return numStr;
+        }
 
         // 初始化装饰元素
         function initDecorations() {
@@ -738,7 +698,6 @@
                 decorations.appendChild(el);
             }
         }
-
         // 星星轨迹效果
         function createStarTrail(x, y) {
             const star = document.createElement('div');
@@ -751,14 +710,12 @@
                 star.remove();
             }, 1000);
         }
-
         // 鼠标移动时产生星星轨迹
         document.addEventListener('mousemove', (e) => {
             if (Math.random() > 0.9) {
                 createStarTrail(e.clientX, e.clientY);
             }
         });
-
         // 初始化分类标签
         function initCategoryTabs() {
             const categories = Object.keys(loveMessages);
@@ -771,12 +728,10 @@
                 tab.onclick = () => switchCategory(cat, tab);
                 tabsContainer.appendChild(tab);
             });
-
             // 更新总数量
             const totalMessages = Object.values(loveMessages).flat().length;
             document.getElementById('totalCount').textContent = totalMessages;
         }
-
         // 切换分类
         function switchCategory(category, tabElement) {
             currentCategory = category;
@@ -784,7 +739,6 @@
             tabElement.classList.add('active');
             getRandomLove();
         }
-
         // 获取随机情话（根据日期每天随机展示精选内容）
         function getRandomLove() {
             const messages = loveMessages[currentCategory];
@@ -804,7 +758,6 @@
             loveText.offsetHeight;
             loveText.style.animation = 'fadeIn 0.6s ease';
             loveText.textContent = random;
-
             // 增加点击计数
             clickCount++;
             
@@ -815,15 +768,16 @@
                 btn.style.transform = 'scale(1)';
             }, 150);
         }
-
-        // 加载运势（根据日期每天随机展示不同的运势）
+        // 加载运势（当日幸运数字固定，跨天刷新）
         function loadFortune() {
-            // 根据日期获取种子，确保每天显示不同的运势
+            // 根据日期获取种子，确保每天显示不同的运势模板
             const today = new Date();
             const dateStr = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
             const seed = dateStr.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
             const fortuneIndex = seed % fortuneLibrary.length;
-            const todayFortune = fortuneLibrary[fortuneIndex];
+            const todayFortune = {...fortuneLibrary[fortuneIndex]};
+            // 读取当日固定幸运数字
+            todayFortune['幸运数字'] = getTodayLuckyNum();
             
             const grid = document.getElementById('fortuneGrid');
             grid.innerHTML = ''; // 清空现有内容
@@ -840,7 +794,6 @@
                 grid.appendChild(item);
             });
         }
-
         // 揭示运势
         function revealFortune() {
             const cover = document.getElementById('fortuneCover');
@@ -856,7 +809,6 @@
             // 添加一些魔法效果
             createMagicEffect();
         }
-
         // 创建魔法效果
         function createMagicEffect() {
             const fortuneCard = document.querySelector('.fortune-card');
@@ -890,7 +842,6 @@
                 }, i * 50);
             }
         }
-
         // 初始化
         window.onload = function() {
             initDecorations();
@@ -903,7 +854,6 @@
             console.log('%c⭐ 欢迎来到星宝崽专属甜言蜜语 ⭐', 'font-size: 20px; color: #667eea; font-weight: bold;');
             console.log('%c制作：星宝崽专属小助手 💕', 'font-size: 14px; color: #f093fb;');
         };
-
         // 更新日期显示
         function updateDateDisplay() {
             const now = new Date();
