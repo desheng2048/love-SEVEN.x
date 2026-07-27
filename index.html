@@ -1,882 +1,538 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⭐ 星宝崽专属甜言蜜语 ✨</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="今天吃什么？随机帮你选！" />
+    <title>今天吃什么？</title>
+    <link rel="preconnect" href="https://fonts.googleapis.cn" />
+    <link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+    <link
+      href="https://fonts.googleapis.cn/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+      /* ========== 基础重置 ========== */
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      /* ========== 设计变量 ========== */
+      :root {
+        --primary: #e85d3a;
+        --primary-dark: #c94a2a;
+        --primary-light: #ff7f5c;
+        --cream: #fff8f0;
+        --cream-dark: #f5ead8;
+        --brown: #3d2c1e;
+        --brown-light: #6b5240;
+        --shadow: 0 8px 32px rgba(61, 44, 30, 0.15);
+        --shadow-lg: 0 16px 48px rgba(61, 44, 30, 0.25);
+        --radius: 20px;
+        --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      body {
+        font-family: "Noto Sans SC", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: var(--cream);
+        color: var(--brown);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow-x: hidden;
+        background-image: radial-gradient(
+            circle at 20% 50%,
+            rgba(232, 93, 58, 0.06) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(232, 93, 58, 0.04) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 60% 80%,
+            rgba(61, 44, 30, 0.03) 0%,
+            transparent 50%
+          );
+      }
+
+      /* ========== 顶部标题 ========== */
+      .header {
+        text-align: center;
+        padding: 40px 20px 20px;
+      }
+
+      .header h1 {
+        font-size: 2.8rem;
+        font-weight: 900;
+        color: var(--brown);
+        letter-spacing: 2px;
+        text-shadow: 2px 2px 0 rgba(232, 93, 58, 0.15);
+      }
+
+      .header h1 span {
+        color: var(--primary);
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        color: var(--brown-light);
+        margin-top: 8px;
+      }
+
+      /* ========== 主容器 ========== */
+      .main-container {
+        width: 100%;
+        max-width: 520px;
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+        padding-bottom: 40px;
+      }
+
+      /* ========== 卡片展示区 ========== */
+      .card-stage {
+        width: 100%;
+        height: 430px;          /* 卡片整体高度，调大=卡片更高 */
+        perspective: 1000px;
+        position: relative;
+      }
+
+      .food-card {
+        width: 100%;
+        height: 100%;
+        background: #fff;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        position: relative;
+        transition: transform var(--transition), box-shadow var(--transition);
+        will-change: transform;
+      }
+
+      .food-card:hover {
+        box-shadow: var(--shadow-lg);
+      }
+
+      .food-card .card-image {
+        width: 100%;
+        height: 360px;          /* 图片高度，调大=图片区域更大 */
+        object-fit: cover;
+        display: block;
+        transition: opacity 0.08s ease-out;
+        will-change: opacity;
+      }
+
+      .food-card.spinning .card-image {
+        opacity: 0.85;
+      }
+
+      .food-card .card-info {
+        padding: 10px 20px 10px; /* 文字区域内边距：上 左右 下 */
+        text-align: center;
+      }
+
+      .food-card .card-name {
+        font-size: 1.6rem;       /* 店铺名字号 */
+        font-weight: 700;
+        color: var(--brown);
+        margin-bottom: 4px;
+      }
+
+      .food-card .card-index {
+        font-size: 0.85rem;      /* 提示文字字号 */
+        color: var(--brown-light);
+        opacity: 0.6;
+      }
+
+      /* 选中状态 */
+      .food-card.selected {
+        animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      .food-card.selected .card-image {
+        transform: scale(1.02);
+      }
+
+      @keyframes bounceIn {
+        0% {
+          transform: scale(0.9);
         }
-        body {
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow-x: hidden;
+        50% {
+          transform: scale(1.05);
         }
-        .container {
-            max-width: 420px;
-            width: 100%;
-            position: relative;
-            z-index: 10;
+        100% {
+          transform: scale(1);
         }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            animation: slideDown 0.8s ease;
+      }
+
+      /* 装饰角标 */
+      .badge {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: var(--primary);
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 6px 14px;
+        border-radius: 20px;
+        opacity: 0;
+        transform: scale(0.5);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        z-index: 2;
+      }
+
+      .food-card.selected .badge {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      /* ========== 按钮区 ========== */
+      .btn-area {
+        display: flex;
+        gap: 16px;
+        width: 100%;
+        justify-content: center;
+      }
+
+      .btn {
+        font-family: inherit;
+        font-size: 1.2rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 60px;
+        cursor: pointer;
+        transition: all var(--transition);
+        letter-spacing: 2px;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .btn-start {
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        color: #fff;
+        padding: 16px 56px;
+        box-shadow: 0 6px 24px rgba(232, 93, 58, 0.35);
+      }
+
+      .btn-start:hover:not(:disabled) {
+        transform: scale(1.05);
+        box-shadow: 0 8px 32px rgba(232, 93, 58, 0.5);
+      }
+
+      .btn-start:active:not(:disabled) {
+        transform: scale(0.97);
+      }
+
+      .btn-start:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .btn-start.rolling {
+        background: linear-gradient(135deg, #999, #bbb);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+      }
+
+      /* ========== 历史记录 ========== */
+      .history-section {
+        width: 100%;
+        margin-top: 8px;
+      }
+
+      .history-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--brown-light);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .history-title::before {
+        content: "";
+        display: inline-block;
+        width: 4px;
+        height: 16px;
+        background: var(--primary);
+        border-radius: 2px;
+      }
+
+      .history-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .history-tag {
+        background: #fff;
+        border: 1px solid var(--cream-dark);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        color: var(--brown-light);
+        box-shadow: 0 2px 8px rgba(61, 44, 30, 0.06);
+        animation: fadeIn 0.3s ease;
+      }
+
+      .history-tag:last-child {
+        border-color: var(--primary);
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
         }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ========== 响应式 ========== */
+      @media (max-width: 480px) {
         .header h1 {
-            color: #fff;
-            font-size: 32px;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-            font-weight: bold;
-            background: linear-gradient(135deg, #fff 0%, #ffd1ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+          font-size: 2rem;
         }
-        .header .subtitle {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
-            margin-top: 8px;
-            letter-spacing: 2px;
+        .card-stage {
+          height: 340px;
         }
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 24px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+        .food-card .card-image {
+          height: 190px;
         }
-        .card::before {
-            content: '⭐';
-            position: absolute;
-            top: -30px;
-            right: -30px;
-            font-size: 120px;
-            opacity: 0.08;
-            transform: rotate(-15deg);
+        .btn-start {
+          padding: 14px 44px;
+          font-size: 1.1rem;
         }
-        .fortune-card {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 240, 245, 0.95) 100%);
-        }
-        .fortune-cover {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .fortune-cover:hover {
-            transform: scale(1.02);
-        }
-        .fortune-icon-large {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite ease-in-out;
-        }
-        .fortune-click-hint {
-            color: #667eea;
-            font-size: 16px;
-            font-weight: 600;
-            margin-top: 15px;
-            padding: 12px 25px;
-            background: linear-gradient(135deg, #f8f9ff 0%, #fff5f8 100%);
-            border-radius: 25px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
-        }
-        .fortune-content {
-            display: none;
-        }
-        .fortune-content.show {
-            display: block;
-            animation: fadeIn 0.6s ease;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        .section-title {
-            color: #667eea;
-            font-size: 18px;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: 600;
-        }
-        .love-text {
-            font-size: 22px;
-            line-height: 1.7;
-            color: #2d3748;
-            text-align: center;
-            min-height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            background: linear-gradient(135deg, #f8f9ff 0%, #fff5f8 100%);
-            border-radius: 16px;
-            font-weight: 500;
-            animation: fadeIn 0.6s ease;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(15px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        @keyframes sparkle {
-            0%, 100% {
-                opacity: 0.3;
-                transform: scale(1) rotate(0deg);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.2) rotate(180deg);
-            }
-        }
-        .fortune-grid {
-            display: grid;
-            gap: 12px;
-        }
-        .fortune-item {
-            background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
-            padding: 14px 18px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 14px;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
-            transition: all 0.3s ease;
-        }
-        .fortune-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-        }
-        .fortune-icon {
-            font-size: 24px;
-            flex-shrink: 0;
-            animation: sparkle 3s infinite ease-in-out;
-        }
-        .fortune-item:nth-child(2) .fortune-icon {
-            animation-delay: 0.5s;
-        }
-        .fortune-item:nth-child(3) .fortune-icon {
-            animation-delay: 1s;
-        }
-        .fortune-item:nth-child(4) .fortune-icon {
-            animation-delay: 1.5s;
-        }
-        .fortune-item:nth-child(5) .fortune-icon {
-            animation-delay: 2s;
-        }
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            color: white;
-            border: none;
-            padding: 16px 45px;
-            border-radius: 50px;
-            font-size: 18px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 22px;
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s ease;
-            font-weight: 600;
-            position: relative;
-            overflow: hidden;
-        }
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s ease;
-        }
-        .btn:hover::before {
-            left: 100%;
-        }
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
-        }
-        .btn:active {
-            transform: translateY(-1px);
-        }
-        .category-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-        }
-        .tab {
-            padding: 10px 16px;
-            border-radius: 25px;
-            font-size: 13px;
-            background: linear-gradient(135deg, #f8f9ff 0%, #fff5f8 100%);
-            color: #667eea;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            font-weight: 500;
-            pointer-events: auto !important;
-            position: relative;
-            z-index: 15;
-        }
-        .tab.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-        .tab:hover:not(.active) {
-            border-color: #667eea;
-            transform: scale(1.05);
-        }
-        .footer {
-            text-align: center;
-            margin-top: 25px;
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 13px;
-            font-weight: 500;
-            animation: slideDown 0.8s ease 0.3s backwards;
-        }
-        .footer .signature {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 20px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-        }
-        .decorations {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-            z-index: 1;
-        }
-        .decoration {
-            position: absolute;
-            font-size: 35px;
-            opacity: 0.4;
-            animation: float 8s infinite ease-in-out;
-            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-        }
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0) rotate(0deg) scale(1);
-            }
-            25% {
-                transform: translateY(-25px) rotate(10deg) scale(1.1);
-            }
-            50% {
-                transform: translateY(-10px) rotate(-5deg) scale(1);
-            }
-            75% {
-                transform: translateY(-30px) rotate(5deg) scale(1.05);
-            }
-        }
-        .star-trail {
-            position: fixed;
-            width: 6px;
-            height: 6px;
-            background: radial-gradient(circle, #fff 0%, #ffd1ff 100%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 2;
-            box-shadow: 0 0 10px #fff, 0 0 20px #ffd1ff;
-            animation: trail-fade 1s ease-out forwards;
-        }
-        @keyframes trail-fade {
-            from {
-                opacity: 1;
-                transform: scale(1);
-            }
-            to {
-                opacity: 0;
-                transform: scale(0);
-            }
-        }
-        .special-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #8b4513;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            box-shadow: 0 2px 10px rgba(255, 215, 0, 0.4);
-            animation: pulse 2s infinite ease-in-out;
-        }
-        .counter {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 12px;
-            margin-top: 10px;
-        }
-        .counter span {
-            color: #ffd1ff;
-            font-weight: bold;
-        }
-        .date-display {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.95);
-            font-size: 12px;
-            margin-top: 12px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            display: inline-block;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .date-display span {
-            margin: 0 5px;
-        }
+      }
     </style>
-</head>
-<body>
-    <div class="decorations" id="decorations"></div>
-    
-    <div class="container">
-        <div class="header">
-            <h1>⭐ 星宝崽专属甜言蜜语 ✨</h1>
-            <div class="subtitle">每天都要被宝贝宠坏呀～</div>
-        </div>
-        <!-- 甜言蜜语卡片 -->
-        <div class="card">
-            <div class="special-badge">星宝崽限定</div>
-            <div class="section-title">
-                <span>💖</span>
-                <span>今日专属情话</span>
-            </div>
-            
-            <div class="category-tabs" id="categoryTabs"></div>
-            
-            <div class="love-text" id="loveText">
-                今天也要给星宝崽说好多好多甜言蜜语～
-            </div>
-            <button class="btn" onclick="getRandomLove()" id="refreshBtn">
-                ✨ 换一句 ✨
-            </button>
-            
-            <div class="counter">
-                已经为你准备了 <span id="totalCount">0</span> 句情话
-            </div>
-            
-            <div class="date-display">
-                <span id="currentDate"></span> | <span id="dailyMessage"></span>
-            </div>
-        </div>
-        <!-- 今日运势卡片 -->
-        <div class="card fortune-card">
-            <div class="fortune-cover" id="fortuneCover" onclick="revealFortune()">
-                <div class="fortune-icon-large">🔮</div>
-                <div style="color: #667eea; font-size: 16px; font-weight: 600; margin-bottom: 10px;">今日运势</div>
-                <div class="fortune-click-hint">✨ 点击查看星宝崽今日运势 ✨</div>
-            </div>
-            
-            <div class="fortune-content" id="fortuneContent">
-                <div class="section-title">
-                    <span>🌟</span>
-                    <span>星宝崽今日运势</span>
-                </div>
-                
-                <div class="fortune-grid" id="fortuneGrid">
-                    <!-- 运势内容动态加载 -->
-                </div>
-            </div>
-        </div>
-        <div class="footer">
-            <div class="signature">
-                💫 专属制作给最可爱的星宝崽 💫
-            </div>
-        </div>
+  </head>
+  <body>
+    <!-- 顶部标题 -->
+    <div class="header">
+      <h1>今天<span>吃什么</span>？</h1>
+      <p>纠结吃什么？让命运来决定！</p>
     </div>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+      <!-- 卡片展示区 -->
+      <div class="card-stage">
+        <div class="food-card" id="foodCard">
+          <div class="badge">就决定是你了！</div>
+          <img
+            class="card-image"
+            id="cardImage"
+            src="images/lanxiangzi.jpg"
+            alt="店铺图片"
+          />
+          <div class="card-info">
+            <div class="card-name" id="cardName">兰湘子</div>
+            <div class="card-index" id="cardIndex">点击按钮开始随机</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 按钮区 -->
+      <div class="btn-area">
+        <button class="btn btn-start" id="startBtn" onclick="startRandom()">
+          开始随机
+        </button>
+      </div>
+
+      <!-- 历史记录 -->
+      <div class="history-section" id="historySection" style="display: none">
+        <div class="history-title">选择记录</div>
+        <div class="history-list" id="historyList"></div>
+      </div>
+    </div>
+
     <script>
-        // 星宝崽专属情话库（每个分类20句，每天随机展示精选内容）
-        const loveMessages = {
-            '全部': [
-                "星宝崽，你今天比星星还亮，比月亮还美✨",
-                "整个银河系都抵不过你的一笑呀～",
-                "宝贝，你是地球上最最最可爱的崽！",
-                "今天也是被星宝崽可爱到心动的一天～",
-                "有你在我身边，每天都像在星际旅行🚀",
-                "星宝崽的眼里装着整个宇宙呢～",
-                "不管去哪里，我的导航终点都是星宝崽💕",
-                "你是我宇宙中唯一的恒星，照亮我的一切",
-                "今天要给星宝崽打一万分，不能再多了！",
-                "宝贝，你就是我心里的那颗星～",
-                "星宝崽是世界上最好的宝贝，不接受反驳！",
-                "每次看到星宝崽，我的心就砰砰跳～",
-                "你笑起来的时候，连星星都要暗淡了呢",
-                "星宝崽是我见过最美好的存在✨",
-                "想把你捧在手心里，像捧着最珍贵的星星",
-                "星宝崽，你的可爱程度已经突破天际了！",
-                "宝贝，你就是上天赐给我最好的礼物🎁",
-                "看到星宝崽，所有的烦恼都消失啦～",
-                "你的眼睛里有整个银河，我愿为你摘星",
-                "星宝崽，你是我生命中最美的意外💖"
-            ],
-            '日常夸夸': [
-                "星宝崽今天也太棒了吧！给你鼓掌👏",
-                "宝贝做什么都很厉害呢，骄傲脸～",
-                "星宝崽简直是全能小天才！",
-                "今天被星宝崽惊艳到了，太优秀啦！",
-                "我的宝贝是最棒最棒的小星星⭐",
-                "星宝崽的努力都看得见，超厉害的！",
-                "宝贝今天表现满分！奖励抱抱～",
-                "星宝崽太优秀了，我要给你写表扬信",
-                "有你这样的宝贝，我真是太幸运了",
-                "星宝崽真的什么都会，太厉害啦！",
-                "宝贝今天的穿搭也太好看了吧✨",
-                "星宝崽的情商超高，我好佩服～",
-                "每次看到星宝崽进步，我都超级开心",
-                "宝贝你是最棒的，要永远自信哦！",
-                "星宝崽做事认真，真的好可爱～",
-                "你的努力都会变成星星，照亮前程⭐",
-                "宝贝就是闪闪发光的存在，不接受反驳",
-                "星宝崽这么优秀，我为你感到骄傲",
-                "你的每一个优点都让我心动不已💕",
-                "宝贝继续加油，你是最棒的崽！"
-            ],
-            '睡前情话': [
-                "晚安呀星宝崽，梦里也要记得我想你💤",
-                "盖好小被子，明天醒来第一个见到的必须是我",
-                "星宝崽要乖乖睡觉哦，我在梦里等你～",
-                "今天的最后一句晚安，只说给我的宝贝听",
-                "睡吧睡吧，我的小星星，梦里见🌙",
-                "不管睡多久，醒来都要想我哦～",
-                "星宝崽晚安，祝你做个甜甜的梦✨",
-                "明天见啦，我最爱的小宝贝",
-                "今晚的月亮和星星都会替我想你的",
-                "宝贝晚安，明天见的时候我会想你的",
-                "晚安星宝崽，你是我梦里的女主角🌟",
-                "闭上眼睛，我们梦里继续相爱💕",
-                "宝贝睡吧，我会守护你的梦境",
-                "星宝崽晚安，愿你的梦里有彩虹",
-                "睡个好觉，明天醒来又是元气满满的一天",
-                "宝贝你睡着的样子一定超可爱～",
-                "晚安我的小星星，明天见✨",
-                "月光会替我亲吻你的额头🌙",
-                "星宝崽乖乖睡觉，不许想别人哦",
-                "最后一个念头是你，第一个梦也是你💖"
-            ],
-            '道歉专用': [
-                "对不起嘛星宝崽，我错了🥺",
-                "别生气了好不好，你生气的样子我心疼",
-                "星宝崽原谅我好不好？给你买奶茶～",
-                "我承认我错了，星宝崽大人有大量",
-                "宝贝别不理我，我会伤心的💔",
-                "对不起对不起，我再也不敢了",
-                "星宝崽消消气，我给你唱首歌好不好？",
-                "我知道错了，宝贝打我一下出出气",
-                "星宝崽最好了，原谅我这一次吧～",
-                "宝贝我错了，以后都听你的",
-                "星宝崽别生气了，我给你买好吃的",
-                "对不起，是我不好，你不理我我会很难过",
-                "宝贝原谅我嘛，我发誓以后注意",
-                "星宝崽我知道错了，你别不开心",
-                "我的错我的错，宝贝想怎么罚我都行",
-                "对不起星宝崽，让你不开心了💕",
-                "宝贝别生气啦，我给你捏肩捶背",
-                "我知道错了，星宝崽最善良了对不对",
-                "对不起嘛，我下次一定注意",
-                "星宝崽原谅我吧，我给你买蛋糕🍰"
-            ],
-            '节日祝福': [
-                "星宝崽节日快乐！有你在每天都像过节🎉",
-                "情人节快乐！我的宝贝就是最好的礼物💕",
-                "星宝崽生日快乐！要天天开心哦～",
-                "宝贝新年快乐！今年也要宠坏你呀✨",
-                "圣诞节快乐星宝崽！你就是我的圣诞老人",
-                "星宝崽快乐！你是上天给我的礼物",
-                "宝贝万圣节快乐！你是最可爱的小女巫",
-                "母亲节快乐！谢谢你做我生命中的小天使",
-                "星宝崽儿童节快乐！永远做我的小宝贝",
-                "每个节日都因为有星宝崽而特别",
-                "宝贝节日快乐，今天你是主角🌟",
-                "星宝崽，你就是我最想收到的礼物",
-                "节日快乐！有你在身边每天都甜蜜",
-                "宝贝新年新气象，继续闪闪发光✨",
-                "星宝崽情人节快乐，爱你💕",
-                "宝贝生日快乐，愿你永远快乐",
-                "星宝崽，每个节日都想和你一起过",
-                "节日快乐宝贝，你是最珍贵的存在",
-                "宝贝感恩节快乐，谢谢你来到我的世界",
-                "星宝崽，有你的节日才叫节日🎊"
-            ],
-            '专属情话': [
-                "星宝崽是我宇宙中唯一的星球🌟",
-                "这辈子最幸运的事就是遇见星宝崽",
-                "不管发生什么，我都会一直陪在星宝崽身边",
-                "你就是我想要的全部，星宝崽",
-                "星宝崽是我永远都不会腻的宝贝",
-                "有星宝崽在，哪里都是家",
-                "我的世界因为有你才完整💕",
-                "星宝崽，你是我生命中最美的意外",
-                "不管多久，我对星宝崽的爱都不会变",
-                "宝贝，你就是我的一切✨",
-                "星宝崽，我愿意陪你走完这一生",
-                "你是我心中最柔软的地方💗",
-                "星宝崽，爱你这件事，我会坚持一辈子",
-                "有你的日子，每一秒都值得珍藏",
-                "星宝崽，你就是我的全世界🌍",
-                "我只想把最好的都给你，星宝崽",
-                "宝贝，你的幸福就是我的幸福",
-                "星宝崽，遇到你让我相信了命运",
-                "你是我生命中最美的风景🌸",
-                "星宝崽，我会永远守护你"
-            ]
-        };
-        // 星宝崽专属运势库（基础文案，幸运数字当日固定）
-        const fortuneLibrary = [
-            {
-                '爱情运': '超级旺！星宝崽魅力爆棚，桃花朵朵开🌸',
-                '今日宜': '适合撒娇、求抱抱、收礼物、吃甜食',
-                '今日忌': '熬夜、生气、不开心、不理翁饱饱',
-                '幸运色': '星空紫、银河蓝、星星金、粉色',
-                '幸运物': '星星项链、粉色手机壳、奶茶'
-            },
-            {
-                '爱情运': '甜蜜指数爆表！今天和翁饱饱一起会超开心💕',
-                '今日宜': '约会、看电影、吃火锅、说情话',
-                '今日忌': '独自一人、错过电话、不理翁饱饱',
-                '幸运色': '梦幻粉、浅蓝、薄荷绿',
-                '幸运物': '玩偶、巧克力、爱心形状的物品'
-            },
-            {
-                '爱情运': '缘分天注定！今天会有美好的事情发生✨',
-                '今日宜': '表白、送花、写信、散步',
-                '今日忌': '犹豫、错过机会、放弃',
-                '幸运色': '彩虹色、橙红色、黄色',
-                '幸运物': '彩虹笔、鲜花、香水'
-            },
-            {
-                '爱情运': '浪漫指数满分！今天适合表达爱意💗',
-                '今日宜': '约会、拥抱、牵手、说"我爱你"',
-                '今日忌': '害羞、隐藏感情、错过时机',
-                '幸运色': '玫瑰红、深紫、金色',
-                '幸运物': '玫瑰、爱心蛋糕、情书'
-            },
-            {
-                '爱情运': '温馨甜蜜！今天和翁饱饱在一起最幸福🌟',
-                '今日宜': '宅家、看电影、做饭、聊天',
-                '今日忌': '加班、忽视对方、冷战',
-                '幸运色': '米白色、浅灰、淡蓝',
-                '幸运物': '毛毯、热茶、相册'
-            },
-            {
-                '爱情运': '惊喜不断！今天会有小确幸降临💕',
-                '今日宜': '准备惊喜、送礼物、写便签',
-                '今日忌': '平淡度过、没有仪式感',
-                '幸运色': '亮银色、宝蓝色、珍珠白',
-                '幸运物': '小礼物、便签纸、珍珠饰品'
-            },
-            {
-                '爱情运': '缘分满满！今天适合创造美好回忆🌸',
-                '今日宜': '拍照、旅行、尝试新事物',
-                '今日忌': '宅在家里、错过美好时光',
-                '幸运色': '春绿色、天蓝色、淡粉色',
-                '幸运物': '相机、旅行攻略、纪念册'
-            },
-            {
-                '爱情运': '温暖治愈！星宝崽的微笑能治愈一切💖',
-                '今日宜': '聊天、安慰、陪伴、分享',
-                '今日忌': '争吵、冷战、不关心',
-                '幸运色': '暖橙色、浅黄色、米色',
-                '幸运物': '暖手宝、咖啡、拥抱'
-            },
-            {
-                '爱情运': '心动时刻！今天会有浪漫的邂逅✨',
-                '今日宜': '打扮自己、出门社交、主动出击',
-                '今日忌': '宅家、被动等待、错过机会',
-                '幸运色': '亮粉色、银色、亮片色',
-                '幸运物': '新衣服、香水、口红'
-            },
-            {
-                '爱情运': '甜蜜暴击！今天会被爱包围🌟',
-                '今日宜': '接受爱意、表达感谢、享受当下',
-                '今日忌': '拒绝、质疑、不珍惜',
-                '幸运色': '糖果色、彩虹色、多彩',
-                '幸运物': '糖果、气球、彩带'
-            }
-        ];
-        const fortuneIcons = {
-            '爱情运': '💕',
-            '今日宜': '✨',
-            '今日忌': '❌',
-            '幸运色': '🎨',
-            '幸运数字': '🔢',
-            '幸运物': '🍀'
-        };
-        let currentCategory = '全部';
-        let clickCount = 0;
+      /*
+       * ============================================
+       *   店铺数据配置（修改/新增店铺请编辑这里）
+       * ============================================
+       *
+       * 每个店铺对象包含：
+       *   - name:  店铺名称（显示用）
+       *   - image: 图片文件名（放在 images/ 文件夹下）
+       *
+       * 新增店铺：在数组末尾添加一个新对象即可
+       * 修改名称：直接改 name 字段
+       * 修改图片：把新图片放到 images/ 文件夹，改 image 字段
+       * 删除店铺：删除对应对象即可
+       */
+      const RESTAURANTS = [
+        { name: "蟹爸爸", image: "xiebaba.jpg" },
+        { name: "新发现", image: "xinfaxian.jpg" },
+        { name: "烤肉", image: "kaorou.jpg" },
+        { name: "滨寿司", image: "binsushi.jpg" },
+        { name: "牛牛寿喜烧", image: "niuniushouxishao.jpg" },
+        { name: "云南小吃", image: "yunnanxiaochi.jpg" },
+        { name: "杭景元麻辣烫", image: "hangjingyuanmalatang.jpg" },
+        { name: "幸福年铁锅炖", image: "xingfuniantieguodun.jpg" },
+        { name: "东大方", image: "dongdafang.jpg" },
+        { name: "泰国菜", image: "taiguocai.jpg" },
+        { name: "越南小吃", image: "yuennanxiaochi.jpg" },
+        { name: "牛排意面", image: "niupaiyimian.jpg" },
+        { name: "盒马", image: "hema.jpg" },
+        { name: "海底捞", image: "haidilao.jpg" },
+        { name: "公司黄牛肉火锅", image: "gongsihuangniurouhuoguo.jpg" },
+        { name: "兰湘子", image: "lanxiangzi.jpg" },
+        { name: "巡湘记", image: "xunxiangji.jpg" },
+        { name: "烤匠烤鱼", image: "kaojiangkaoyu.jpg" },
+        { name: "路边摊", image: "lubiantan.jpg" },
+        { name: "自己下厨", image: "zijixiachu.jpg" },
+		{ name: "必胜客", image: "bishengke.jpg" },
+      ];
 
-        // 获取当天日期字符串 YYYY-MM-DD
-        function getTodayStr() {
-            const d = new Date();
-            const y = d.getFullYear();
-            const m = String(d.getMonth() + 1).padStart(2, '0');
-            const day = String(d.getDate()).padStart(2, '0');
-            return `${y}-${m}-${day}`;
-        }
+      /* ========== 状态变量 ========== */
+      let isSpinning = false;
+      let spinTimer = null;
+      let currentIndex = 0;
+      let history = [];
+      let preloadedImages = [];
 
-        // 获取当日固定幸运数字，跨天才重新生成
-        function getTodayLuckyNum() {
-            const today = getTodayStr();
-            const storageKey = 'starBabyLuckyNum';
-            const saved = localStorage.getItem(storageKey);
-            if (saved) {
-                const data = JSON.parse(saved);
-                // 同一天直接读取缓存数字
-                if (data.date === today) {
-                    return data.numStr;
-                }
-            }
-            // 日期不一样，生成新数字并缓存
-            const num1 = Math.floor(Math.random() * 10) + 1;
-            const num2 = Math.floor(Math.random() * 41) + 10;
-            const num3 = Math.floor(Math.random() * 50) + 51;
-            const numStr = `${num1}、${num2}、${num3}`;
-            localStorage.setItem(storageKey, JSON.stringify({
-                date: today,
-                numStr: numStr
-            }));
-            return numStr;
-        }
+      /* ========== DOM 引用 ========== */
+      const card = document.getElementById("foodCard");
+      const cardImage = document.getElementById("cardImage");
+      const cardName = document.getElementById("cardName");
+      const cardIndex = document.getElementById("cardIndex");
+      const startBtn = document.getElementById("startBtn");
+      const historySection = document.getElementById("historySection");
+      const historyList = document.getElementById("historyList");
 
-        // 初始化装饰元素
-        function initDecorations() {
-            const decorations = document.getElementById('decorations');
-            const emojis = ['⭐', '✨', '💫', '🌟', '💕', '🎀', '🌸', '💗', '💖', '✨'];
-            for (let i = 0; i < 20; i++) {
-                const el = document.createElement('div');
-                el.className = 'decoration';
-                el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-                el.style.left = Math.random() * 100 + '%';
-                el.style.top = Math.random() * 100 + '%';
-                el.style.animationDelay = Math.random() * 4 + 's';
-                el.style.animationDuration = (6 + Math.random() * 4) + 's';
-                decorations.appendChild(el);
-            }
-        }
-        // 星星轨迹效果
-        function createStarTrail(x, y) {
-            const star = document.createElement('div');
-            star.className = 'star-trail';
-            star.style.left = x + 'px';
-            star.style.top = y + 'px';
-            document.body.appendChild(star);
-            
-            setTimeout(() => {
-                star.remove();
-            }, 1000);
-        }
-        // 鼠标移动时产生星星轨迹
-        document.addEventListener('mousemove', (e) => {
-            if (Math.random() > 0.9) {
-                createStarTrail(e.clientX, e.clientY);
-            }
+      /* ========== 预加载所有图片 ========== */
+      (function preloadImages() {
+        RESTAURANTS.forEach(function (r) {
+          const img = new Image();
+          img.src = "images/" + r.image;
+          preloadedImages.push(img);
         });
-        // 初始化分类标签
-        function initCategoryTabs() {
-            const categories = Object.keys(loveMessages);
-            const tabsContainer = document.getElementById('categoryTabs');
-            
-            categories.forEach(cat => {
-                const tab = document.createElement('div');
-                tab.className = `tab ${cat === '全部' ? 'active' : ''}`;
-                tab.textContent = cat;
-                tab.onclick = () => switchCategory(cat, tab);
-                tabsContainer.appendChild(tab);
-            });
-            // 更新总数量
-            const totalMessages = Object.values(loveMessages).flat().length;
-            document.getElementById('totalCount').textContent = totalMessages;
+      })();
+
+      /* ========== 核心逻辑：随机选择 ========== */
+      function startRandom() {
+        if (isSpinning) return;
+        isSpinning = true;
+
+        // 切换按钮状态
+        startBtn.disabled = true;
+        startBtn.textContent = "选择中...";
+        startBtn.classList.add("rolling");
+
+        // 移除之前的选中状态
+        card.classList.remove("selected");
+
+        // 开始快速轮播
+        card.classList.add("spinning");
+
+        // 随机起始位置，顺序轮播（避免随机选中同一个导致"卡住"）
+        let pos = Math.floor(Math.random() * RESTAURANTS.length);
+        let stepCount = 0;
+        // 总步数：快速30步 + 减速15步 + 慢速8步 = 53步
+        const totalSteps = 53;
+
+        function tick() {
+          stepCount++;
+
+          // 顺序递增，保证每次都切到不同店铺
+          pos = (pos + 1) % RESTAURANTS.length;
+          updateCard(pos);
+
+          if (stepCount >= totalSteps) {
+            stopSpin(pos);
+            return;
+          }
+
+          // 速度曲线：快速 → 减速 → 慢速 → 极慢
+          let speed;
+          if (stepCount < 20) {
+            speed = 50;
+          } else if (stepCount < 30) {
+            speed = 80;
+          } else if (stepCount < 40) {
+            speed = 140;
+          } else if (stepCount < 48) {
+            speed = 240;
+          } else {
+            speed = 400;
+          }
+
+          spinTimer = setTimeout(tick, speed);
         }
-        // 切换分类
-        function switchCategory(category, tabElement) {
-            currentCategory = category;
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            tabElement.classList.add('active');
-            getRandomLove();
+
+        spinTimer = setTimeout(tick, 50);
+      }
+
+      function stopSpin(finalPos) {
+        card.classList.remove("spinning");
+        isSpinning = false;
+
+        // 最终选中
+        updateCard(finalPos);
+
+        // 添加选中动画
+        card.classList.add("selected");
+
+        // 记录历史
+        addHistory(RESTAURANTS[finalPos].name);
+
+        // 恢复按钮
+        startBtn.disabled = false;
+        startBtn.textContent = "再来一次";
+        startBtn.classList.remove("rolling");
+      }
+
+      /* ========== 更新卡片 ========== */
+      function updateCard(index) {
+        const r = RESTAURANTS[index];
+        // 使用预加载的图片源，避免加载延迟
+        cardImage.src = preloadedImages[index].src;
+        cardImage.alt = r.name;
+        cardName.textContent = r.name;
+        cardIndex.textContent = isSpinning
+          ? "随机滚动中..."
+          : "第 " + (index + 1) + " / " + RESTAURANTS.length + " 家";
+      }
+
+      /* ========== 历史记录 ========== */
+      function addHistory(name) {
+        history.push(name);
+        // 最多保留 10 条
+        if (history.length > 10) history.shift();
+
+        historySection.style.display = "block";
+        historyList.innerHTML = "";
+        history.forEach(function (item) {
+          const tag = document.createElement("span");
+          tag.className = "history-tag";
+          tag.textContent = item;
+          historyList.appendChild(tag);
+        });
+      }
+
+      /* ========== 键盘快捷键：空格触发 ========== */
+      document.addEventListener("keydown", function (e) {
+        if (e.code === "Space" && !isSpinning) {
+          e.preventDefault();
+          startRandom();
         }
-        // 获取随机情话（根据日期每天随机展示精选内容）
-        function getRandomLove() {
-            const messages = loveMessages[currentCategory];
-            
-            // 根据当前时间和点击次数生成随机种子
-            const now = new Date();
-            const timeSeed = now.getTime();
-            const clickSeed = clickCount * 13; // 乘以13增加随机性
-            const seed = timeSeed + clickSeed;
-            
-            // 使用简单的伪随机算法
-            const randomIndex = Math.floor(Math.abs(Math.sin(seed)) * messages.length);
-            const random = messages[randomIndex];
-            
-            const loveText = document.getElementById('loveText');
-            loveText.style.animation = 'none';
-            loveText.offsetHeight;
-            loveText.style.animation = 'fadeIn 0.6s ease';
-            loveText.textContent = random;
-            // 增加点击计数
-            clickCount++;
-            
-            // 按钮动画反馈
-            const btn = document.getElementById('refreshBtn');
-            btn.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                btn.style.transform = 'scale(1)';
-            }, 150);
-        }
-        // 加载运势（当日幸运数字固定，跨天刷新）
-        function loadFortune() {
-            // 根据日期获取种子，确保每天显示不同的运势模板
-            const today = new Date();
-            const dateStr = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-            const seed = dateStr.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
-            const fortuneIndex = seed % fortuneLibrary.length;
-            const todayFortune = {...fortuneLibrary[fortuneIndex]};
-            // 读取当日固定幸运数字
-            todayFortune['幸运数字'] = getTodayLuckyNum();
-            
-            const grid = document.getElementById('fortuneGrid');
-            grid.innerHTML = ''; // 清空现有内容
-            
-            Object.entries(todayFortune).forEach(([type, content], index) => {
-                const item = document.createElement('div');
-                item.className = 'fortune-item';
-                item.style.animationDelay = `${index * 0.1}s`;
-                const icon = fortuneIcons[type] || '✨';
-                item.innerHTML = `
-                    <span class="fortune-icon">${icon}</span>
-                    <span><strong>${type}：</strong>${content}</span>
-                `;
-                grid.appendChild(item);
-            });
-        }
-        // 揭示运势
-        function revealFortune() {
-            const cover = document.getElementById('fortuneCover');
-            const content = document.getElementById('fortuneContent');
-            
-            // 隐藏封面，显示内容
-            cover.style.display = 'none';
-            content.classList.add('show');
-            
-            // 加载运势内容
-            loadFortune();
-            
-            // 添加一些魔法效果
-            createMagicEffect();
-        }
-        // 创建魔法效果
-        function createMagicEffect() {
-            const fortuneCard = document.querySelector('.fortune-card');
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const sparkle = document.createElement('div');
-                    sparkle.textContent = '✨';
-                    sparkle.style.position = 'absolute';
-                    sparkle.style.left = Math.random() * 100 + '%';
-                    sparkle.style.top = Math.random() * 100 + '%';
-                    sparkle.style.fontSize = '20px';
-                    sparkle.style.opacity = '0';
-                    sparkle.style.transform = 'scale(0)';
-                    sparkle.style.transition = 'all 0.6s ease';
-                    sparkle.style.zIndex = '100';
-                    fortuneCard.appendChild(sparkle);
-                    
-                    setTimeout(() => {
-                        sparkle.style.opacity = '1';
-                        sparkle.style.transform = 'scale(1.5)';
-                    }, 50);
-                    
-                    setTimeout(() => {
-                        sparkle.style.opacity = '0';
-                        sparkle.style.transform = 'scale(0) translateY(-30px)';
-                    }, 500);
-                    
-                    setTimeout(() => {
-                        sparkle.remove();
-                    }, 1100);
-                }, i * 50);
-            }
-        }
-        // 初始化
-        window.onload = function() {
-            initDecorations();
-            initCategoryTabs();
-            // 不再自动加载运势，等待用户点击
-            getRandomLove();
-            updateDateDisplay();
-            
-            // 欢迎提示
-            console.log('%c⭐ 欢迎来到星宝崽专属甜言蜜语 ⭐', 'font-size: 20px; color: #667eea; font-weight: bold;');
-            console.log('%c制作：星宝崽专属小助手 💕', 'font-size: 14px; color: #f093fb;');
-        };
-        // 更新日期显示
-        function updateDateDisplay() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-            const weekDay = weekDays[now.getDay()];
-            
-            document.getElementById('currentDate').textContent = `${year}年${month}月${day}日 ${weekDay}`;
-            
-            // 根据星期几显示不同的每日寄语
-            const dailyMessages = [
-                '新的一周，星宝崽要元气满满哦～',
-                '周二继续加油，你是最棒的！',
-                '周三过半，胜利在望✨',
-                '周四啦，马上就是周末啦！',
-                '周五快乐！星宝崽最开心的一天～',
-                '周六放松日，好好享受生活💕',
-                '周日休息日，记得照顾好自己哦'
-            ];
-            document.getElementById('dailyMessage').textContent = dailyMessages[now.getDay()];
-        }
+      });
     </script>
-</body>
+  </body>
 </html>
